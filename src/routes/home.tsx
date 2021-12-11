@@ -5,7 +5,7 @@ import { isIframe } from "@metapages/metapage";
 
 export const Route: FunctionalComponent = () => (
   <>
-    <Plotly />
     {isIframe() ? null : <ButtonHelp />}
+    <Plotly />
   </>
 );
