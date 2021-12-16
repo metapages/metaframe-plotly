@@ -30,16 +30,16 @@ const packageName = JSON.parse(
   fs.readFileSync("./package.json", { encoding: "utf8", flag: "r" })
 )["name"];
 const GithubPages_baseWebPath = packageName.split("/")[1];
-
+console.log('GithubPages_baseWebPath', GithubPages_baseWebPath);
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => ({
   // For serving NOT at the base path e.g. with github pages: https://<user_or_org>.github.io/<repo>/
   base:
     DEPLOY_TARGET === DeployTarget.Glitch
       ? undefined
-      : GithubPages_BUILD_SUB_DIR !== ""
+      : (GithubPages_BUILD_SUB_DIR !== ""
       ? `/${GithubPages_baseWebPath}/${GithubPages_BUILD_SUB_DIR}/`
-      : `/${GithubPages_baseWebPath}/`,
+      : `/${GithubPages_baseWebPath}/`),
   resolve: {
     alias: {
       react: "preact/compat",
