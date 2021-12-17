@@ -12,7 +12,6 @@ export const Plotly: FunctionalComponent = () => {
   const [config, setConfig] = useState<any>({});
   const [layout, setLayout] = useState<any>({});
 
-
   // listen to inputs and cleanup up listener
   useEffect(() => {
     if (!metaframeObject?.metaframe) {
@@ -20,6 +19,10 @@ export const Plotly: FunctionalComponent = () => {
     }
     const metaframe = metaframeObject.metaframe;
     const onInputs = (newinputs: MetaframeInputMap): void => {
+      // Notify others inputs are recieved for performance
+      metaframe.setOutputs({
+        event: { id: newinputs.id, name: "inputs", time: performance.now() },
+      });
       if (newinputs.data) {
         setData(newinputs.data);
       }
@@ -31,20 +34,21 @@ export const Plotly: FunctionalComponent = () => {
       }
     };
     metaframe.addListener(Metaframe.INPUTS, onInputs);
+    const disposer = metaframe.onInputs(onInputs);
 
     return () => {
       // If the metaframe is cleaned up, also remove the inputs listener
-      metaframe.removeListener(Metaframe.INPUTS, onInputs);
+      disposer();
     };
   }, [metaframeObject.metaframe, setData, setConfig, setLayout]);
 
   return (
-      <Plot
-        style={{ width: "100%", height: "100%" }}
-        data={data}
-        layout={{...{ autosize:true},...layout }}
-        config={{...({responsive: true}), ...config}}
-        useResizeHandler={true}
-      />
+    <Plot
+      style={{ width: "100%", height: "100%" }}
+      data={data}
+      layout={{ ...{ autosize: true }, ...layout }}
+      config={{ ...{ responsive: true }, ...config }}
+      useResizeHandler={true}
+    />
   );
 };
