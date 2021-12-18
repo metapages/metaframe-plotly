@@ -23,15 +23,18 @@ export const Plotly: FunctionalComponent = () => {
       metaframe.setOutputs({
         event: { id: newinputs.id, name: "inputs", time: performance.now() },
       });
-      if (newinputs.data) {
-        setData(newinputs.data);
-      }
-      if (newinputs.config) {
-        setConfig(newinputs.config);
-      }
-      if (newinputs.layout) {
-        setLayout(newinputs.layout);
-      }
+      setData(newinputs.data || null);
+      setConfig(newinputs.config || null);
+      setLayout(newinputs.layout || null);
+      // if (newinputs.data) {
+      //   setData(newinputs.data);
+      // }
+      // if (newinputs.config) {
+
+      // }
+      // if (newinputs.layout) {
+
+      // }
     };
     metaframe.addListener(Metaframe.INPUTS, onInputs);
     const disposer = metaframe.onInputs(onInputs);
