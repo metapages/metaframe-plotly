@@ -13,13 +13,6 @@ export const Plotly: FunctionalComponent = () => {
   const [layout, setLayout] = useState<any>({});
   const [ debug ] = useHashParamBoolean("debug");
 
-
-  useEffect(() => {
-    if (metaframeObject.metaframe) {
-      console.log('new metaframe object');
-    }
-  }, [metaframeObject.metaframe]);
-
   // listen to inputs and cleanup up listener
   useEffect(() => {
     if (!metaframeObject?.metaframe) {
