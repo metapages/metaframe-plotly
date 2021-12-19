@@ -1,7 +1,7 @@
 import { FunctionalComponent } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import { useMetaframe } from "@metapages/metaframe-hook";
-import { Metaframe, MetaframeInputMap } from "@metapages/metapage";
+import { MetaframeInputMap } from "@metapages/metapage";
 import Plot from "react-plotly.js";
 
 export const Plotly: FunctionalComponent = () => {
@@ -12,6 +12,12 @@ export const Plotly: FunctionalComponent = () => {
   const [config, setConfig] = useState<any>({});
   const [layout, setLayout] = useState<any>({});
 
+  useEffect(() => {
+    if (metaframeObject.metaframe) {
+      console.log('new metaframe object');
+    }
+  }, [metaframeObject.metaframe]);
+
   // listen to inputs and cleanup up listener
   useEffect(() => {
     if (!metaframeObject?.metaframe) {
@@ -19,6 +25,7 @@ export const Plotly: FunctionalComponent = () => {
     }
     const metaframe = metaframeObject.metaframe;
     const onInputs = (newinputs: MetaframeInputMap): void => {
+
       // Notify others inputs are recieved for performance
       metaframe.setOutputs({
         event: { id: newinputs.id, name: "inputs", time: performance.now() },
@@ -26,17 +33,7 @@ export const Plotly: FunctionalComponent = () => {
       setData(newinputs.data || null);
       setConfig(newinputs.config || null);
       setLayout(newinputs.layout || null);
-      // if (newinputs.data) {
-      //   setData(newinputs.data);
-      // }
-      // if (newinputs.config) {
-
-      // }
-      // if (newinputs.layout) {
-
-      // }
     };
-    metaframe.addListener(Metaframe.INPUTS, onInputs);
     const disposer = metaframe.onInputs(onInputs);
 
     return () => {
